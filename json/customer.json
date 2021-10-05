@@ -1,34 +1,20 @@
 [
     {
         "name": "adarsh",
-        "mobileNo": "8373872392",
+        "mobileNo": "827328308",
         "gender": "male",
-        "email": "abc@gmail.com",
-        "uniqueKey": "adar8373",
-        "stayOfDays": "4"
-    },
-    {
-        "name": "karan",
-        "mobileNo": "7238783233",
-        "gender": "male",
-        "email": "karan@gamil.com",
-        "uniqueKey": "kara7238",
-        "stayOfDays": "2"
-    },
-    {
-        "name": "naveen",
-        "mobileNo": "5492839823",
-        "gender": "male",
-        "email": "naveen@gmail.com",
-        "uniqueKey": "nave5492",
+        "email": "adarsh@gmail.com",
+        "uniqueKey": "adar8273",
+        "checkInDate": "2021-10-05T06:37:25.020Z",
         "stayOfDays": "1"
     },
     {
-        "name": "ravi",
-        "mobileNo": "2389340349",
-        "gender": "male",
-        "email": "ravi@gmail.com",
-        "uniqueKey": "ravi2389",
-        "stayOfDays": "5"
+        "name": "kiran",
+        "mobileNo": "9898635237",
+        "gender": "f",
+        "email": "kiran@gmail.com",
+        "uniqueKey": "kira9898",
+        "checkInDate": "2021-10-05T12:52:02.100Z",
+        "stayOfDays": "2"
     }
 ]

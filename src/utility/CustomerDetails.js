@@ -6,7 +6,9 @@ class CustomerDetails {
     email;
     timeOfStay;
     uniqueKey;
-    
+    checkInDate;
+    checkOutDate;
+
 
     constructor(...params) {
         this.name = params[0];
@@ -15,14 +17,16 @@ class CustomerDetails {
         this.email = params[3];
         this.timeOfStay = params[4];
         this.uniqueKey = params[5];
+        this.checkInDate = params[6];
+        this.checkOutDate = params[7];
     }
 
     set name(name) {
-        let nameRegex = RegExp('^[A-Z{1}][a-z]{3,}$');
+        let nameRegex = RegExp(/^[A-Z{1}][a-z]{3,}$/);
         if (nameRegex.test(name)) {
             this.name = name;
         } else {
-            throw "First name incorrect";
+            console.error("Not matched");
         }
 
     }
@@ -32,11 +36,11 @@ class CustomerDetails {
     }
 
     set mobileNo(mobileNo) {
-        let mobileNoRegex = RegExp('^(0|91|99|62|88)?[\\s][0-9]{10}$');
+        let mobileNoRegex = RegExp(/^(0|91|99|62|88)?[\\s][\d]{10}$/);
         if (mobileNoRegex.test(mobileNo)) {
             this.mobileNo = mobileNo;
         } else {
-            throw "Mobile number incorrect";
+            console.error("Not matched");
         }
 
     }
@@ -51,7 +55,7 @@ class CustomerDetails {
         if (genderRegex.test(gender)) {
             this.gender = gender;
         } else {
-            throw "gender incorrect";
+            console.error("Not matched");
         }
 
     }
@@ -65,7 +69,7 @@ class CustomerDetails {
         if (emailRegex.test(email)) {
             this.email = email;
         } else {
-            throw "Email incorrect";
+            console.error("Not matched");
         }
 
     }
@@ -86,13 +90,30 @@ class CustomerDetails {
         return this.timeOfStay;
     }
 
-    set uniqueKey(uniqueKey){
+    set uniqueKey(uniqueKey) {
         this.uniqueKey = uniqueKey;
     }
 
-    get uniqueKey(){
+    get uniqueKey() {
         return this.uniqueKey;
     }
+
+    set checkInDate(checkInDate){
+        this.checkInDate = checkInDate;
+    }
+
+    get checkInDate(){
+        return this.checkInDate;
+    }
+
+    set checkOutDate(checkOutDate){
+        this.checkOutDate = checkOutDate;
+    }
+
+    get checkOutDate(){
+        return this.checkOutDate;
+    }
+
     toString() {
         return ["name:" + this.name + "mobileNo: " + this.mobileNo + "gender:" +
             this.gender + "email:" + this.email + "timeOfStay:" + this.timeOfStay];

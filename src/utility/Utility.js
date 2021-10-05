@@ -1,7 +1,7 @@
 const fs = require('fs');
+const JsonToXlsx = require("xlsx");
 const CustomerDetails = require("./CustomerDetails");
 const Orders = require("./Orders");
-const Services = require("./Services");
 const prompt = require("prompt-sync")();
 
 class Utility {
@@ -19,6 +19,7 @@ class Utility {
         customer.email = prompt("Enter your email: ");
         customer.stayOfDays = prompt("Enter days you want to stay: ")
         customer.uniqueKey = this.generateUniqueKey(customer.name, customer.mobileNo);
+        customer.checkInDate = new Date();
         this.writeDataToJson(customer);
         console.log(customer.name + " you have registered successfully:")
     }
@@ -30,18 +31,64 @@ class Utility {
 
 
     writeDataToJson(customer) {
-        const doc = fs.readFileSync("./json/customer.json");
-        const docObj = JSON.parse(doc);
-        docObj.push(customer);
-        const str = JSON.stringify(docObj);
-        fs.writeFileSync("./json/customer.json", str);
+        try {
+            const docObj = JSON.parse(fs.readFileSync("./json/customer.json"));
+            docObj.push(customer);
+            fs.writeFileSync("./json/customer.json", JSON.stringify(docObj));
+        } catch {
+            let docArray = new Array();
+            docArray.push(customer);
+            fs.writeFileSync("./json/customer.json", JSON.stringify(docArray));
+        }
+
+
+    }
+    // login 
+    login() {
+        let flag = true;
+        while (flag) {
+            console.log("\n|--- Select login option ---|" + "\nPress 1: Admin Login-" + "\nPress 2: Customer Login-" + "\npress 3: Exit-");
+            let option = parseInt(prompt("Enter menu option:"));
+            switch (option) {
+                case 1:
+                    console.log("\n");
+                    this.adminLogin();
+                    break;
+                case 2:
+                    console.log("\n");
+                    this.customerLogin();
+                    break;
+                case 3:
+                    flag = false;
+                    break;
+                default:
+                    console.log("\nYou Entered Wrong...");
+                    break;
+            }
+        }
 
     }
 
-    // login login- 
-    login() {
+    // Admin login-
+    adminLogin() {
+        const key = "Admin";
+        let adminKey = prompt("Enter Admin key:")
+        if (key === adminKey) {
+            this.generateReport();
+        } else {
+            console.log("\nYou Entered Wrong...");
+        }
+    }
 
-        let name = prompt("Enter user name: ");
+    // Generate Report-
+    generateReport() {
+        console.log("Print Report:");
+        this.jsonToXlsx("./json/customer.json", "./reports/report.xlsx", "report");
+    }
+    // customer login login- 
+    customerLogin() {
+
+        let name = prompt("Enter customer name: ");
         let password = prompt("Enter your password: ")
 
         const doc = fs.readFileSync("./json/customer.json");
@@ -52,8 +99,9 @@ class Utility {
                 this.customer = docObj[user];
                 console.log("\n|--- Welcome", this.customer.name + "! ---|");
                 this.customerMenu();
-            } else console.log("Incorrect matched");
+            }
         }
+        console.log("Incorrect matched");
         console.log("");
     }
 
@@ -90,13 +138,13 @@ class Utility {
     // customers order food serviecs-
     orderFoodMenu() {
         let flag = true;
-        while(flag){
+        while (flag) {
             console.log("\nPress 1 - Order Tea (50rs)");
             console.log("Press 2 - Order Breakfast (100rs)");
             console.log("Press 3 - Order Lunch (250rs)");
             console.log("Press 4 - Order Dinner (350rs)");
             console.log("Press 5 - Back\n");
-           let option = parseInt(prompt("Enter choice"));
+            let option = parseInt(prompt("Enter choice"));
 
             switch (option) {
                 case 1:
@@ -108,7 +156,6 @@ class Utility {
                     console.log("\nOrder placed successfully");
                     break;
                 case 3:
-
                     this.writeOrdersInJson(new Orders(this.customer.uniqueKey, "Lunch", 1, 250));
                     console.log("\nOrder placed successfully");
                     break;
@@ -119,6 +166,8 @@ class Utility {
                 case 5:
                     flag = false;
                     break;
+                default:
+                    console.log("choose right one...");
             }
 
         }
@@ -127,24 +176,27 @@ class Utility {
     // customers order other services-
     otherServices() {
         let flag = true;
-        while(flag){
+        while (flag) {
             console.log("\nPress 1 - Order Bedsheet(250rs)");
             console.log("Press 2 - Order Blancket(350rs)");
-            console.log("Press 3 - Back\n");
+            console.log("Press 3 - Exit\n");
             let option = parseInt(prompt("Enter choice"));
 
             switch (option) {
                 case 1:
-                    this.writeOtherServicesTnJson(new Services(this.customer.uniqueKey, "Bedsheet", 1, 250));
+                    this.writeOrdersInJson(new Orders(this.customer.uniqueKey, "Bedsheet", 1, 250));
                     console.log("\nOrder placed successfully");
                     break;
                 case 2:
-                    this.writeOtherServicesTnJson(new Services(this.customer.uniqueKey, "Blancket", 1, 350));
+                    this.writeOrdersInJson(new Orders(this.customer.uniqueKey, "Blancket", 1, 350));
                     console.log("\nOrder placed successfully");
                     break;
                 case 3:
+                    console.log("Exit");
                     flag = false;
                     break;
+                default:
+                    console.log("choose right one...");
             }
 
         }
@@ -152,27 +204,61 @@ class Utility {
 
     // customer checkout services-
     checkoutMenu() {
-        console.log("checout hotel:");
+        console.log("Generate bill");
+        let checkInDate = new Date(this.customer.checkInDate);
+        this.customer.checkOutDate = new Date();
+        const totalBill = this.generateBill(this.customer.uniqueKey, checkInDate, this.customer.checkOutDate);
+        console.log(totalBill);
+
+    }
+    generateBill(uniqueKey, checkInDate, checkOutDate) {
+        const docObj = JSON.parse((fs.readFileSync("./json/orders.json")));
+        const docObj2 = JSON.parse((fs.readFileSync("./json/customer.json")));
+        let sum = 0; let stay = 0;
+        let diff = checkOutDate.getHours() - checkInDate.getHours();
+        docObj.forEach(element => {
+            if (element.uniqueKey === uniqueKey) {
+                sum += element.price;
+            }
+        });
+        docObj2.forEach(element => {
+            if (element.uniqueKey === uniqueKey) {
+                stay = element.stayOfDays;
+            }
+        });
+        if (diff < 12) {
+            return sum += 500;
+        } else {
+            return sum += stay * 1000;
+        }
     }
 
     //  customer orders read-write data in json
-    writeOrdersInJson(customer) {
-        const doc = fs.readFileSync("./json/order.json");
-        const docObj = JSON.parse(doc);
-        docObj.push(customer);
-        const str = JSON.stringify(docObj);
-        fs.writeFileSync("./json/order.json", str);
-
+    writeOrdersInJson(order) {
+        try {
+            const docObj = JSON.parse(fs.readFileSync("./json/orders.json"));
+            docObj.push(order);
+            fs.writeFileSync("./json/orders.json", JSON.stringify(docObj));
+        } catch {
+            let docArray = new Array();
+            docArray.push(order);
+            fs.writeFileSync("./json/orders.json", JSON.stringify(docArray));
+        }
     }
 
-    //  customers other order read-write data in json
-    writeOtherServicesTnJson(customer) {
-        const doc = fs.readFileSync("./json/services.json");
-        const docObj = JSON.parse(doc);
-        docObj.push(customer);
-        const str = JSON.stringify(docObj);
-        fs.writeFileSync("./json/services.json", str);
-    }
+
+    getJsonObj = (inputFile) => {
+        let stringJson = fs.readFileSync(inputFile);
+        let jsonObj = JSON.parse(stringJson);
+        return jsonObj;
+    };
+    jsonToXlsx = (jsonFile, xlsxFile, sheetName) => {
+        let jsonObj = this.getJsonObj(jsonFile);
+        let workBook = JsonToXlsx.utils.book_new();
+        let workSheet = JsonToXlsx.utils.json_to_sheet(jsonObj);
+        JsonToXlsx.utils.book_append_sheet(workBook, workSheet, sheetName);
+        JsonToXlsx.writeFile(workBook, xlsxFile);
+    };
 }
 
 module.exports = Utility;

@@ -1,0 +1,20 @@
+[
+    {
+        "uniqueKey": "Adar8273",
+        "item": "Lunch",
+        "quantity": 1,
+        "price": 250
+    },
+    {
+        "uniqueKey": "kira9898",
+        "item": "Lunch",
+        "quantity": 1,
+        "price": 250
+    },
+    {
+        "uniqueKey": "kira9898",
+        "item": "Breakfast",
+        "quantity": 1,
+        "price": 100
+    }
+]
