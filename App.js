@@ -5,7 +5,7 @@ let utility = new Utility();
 console.log("\n|----- welcome to hotel -----|");
 let flag = true;
 while(flag){
-    let option = utility.mainMenu();
+    let option = utility.     mainMenu();
     switch(option) {
         case 1:
             console.log("|----- Registeration process -----|\n");

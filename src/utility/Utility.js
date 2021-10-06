@@ -81,9 +81,10 @@ class Utility {
     }
 
     // Generate Report-
-    generateReport() {
-        console.log("Print Report:");
-        this.jsonToXlsx("./json/customer.json", "./reports/report.xlsx", "report");
+    generateReport() {       
+        console.log("Print Report:");                                                                                                            
+        this.jsonToXlsx("./json/customer.json", "./reports/report.xlsx", "customerReport");                                       
+        this.jsonToXlsx("./json/orders.json", "./reports/order.xlsx", "orderReport");                                               
     }
     // customer login login- 
     customerLogin() {

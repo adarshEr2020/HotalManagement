@@ -16,5 +16,18 @@
         "uniqueKey": "kira9898",
         "checkInDate": "2021-10-05T12:52:02.100Z",
         "stayOfDays": "2"
-    }
+    },
+    {
+        "name": "aman",
+        "mobileNo": "9898323343",
+        "gender": "male",
+        "email": "aman@gmail.com",
+        "uniqueKey": "aman9898",
+        "checkInDate": "2021-10-06T07:54:57.455Z",
+        "stayOfDays": "2"
+    },
+    null,
+    null,
+    null,
+    {}
 ]

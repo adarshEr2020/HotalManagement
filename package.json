@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./App.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha ./src/test/Tests.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adarshEr2020/HotalManagement.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Adarsh Prajapati",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/adarshEr2020/HotalManagement/issues"
@@ -21,5 +21,9 @@
   "dependencies": {
     "prompt-sync": "^4.2.0",
     "xlsx": "^0.17.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.1.2"
   }
 }
